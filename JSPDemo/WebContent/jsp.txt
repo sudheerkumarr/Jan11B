@@ -1,0 +1,3 @@
+ <%= expression tag - single line java code %>
+ <%  scriptlet tag - multi line java code  %>
+ <%! Declarative tag -  define functions/method %>
