@@ -1,0 +1,282 @@
+// Case 1: Servlet handles get request
+// AddServlet.java
+public void service(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	
+	// Read num1, num2 and convert string to int type.
+	int n1 = Integer.parseInt(request.getParameter("num1"));
+	int n2 = Integer.parseInt(request.getParameter("num2"));
+	
+	// add numbers
+	int sum = n1+n2;
+	
+	// return sum
+	PrintWriter out = response.getWriter();
+	out.print(sum);
+}
+
+// Case 2: Servlet handles get request, add numbers, send result to 2nd servlet to square using RequestDispatcher .
+// AddServlet.java
+public void service(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	
+	int n1 = Integer.parseInt(request.getParameter("num1"));
+	int n2 = Integer.parseInt(request.getParameter("num2"));
+	int sum = n1+n2;
+	
+	// update request object with sum value
+	request.setAtribute("sum", sum);
+	
+	// Create RequestDispatcher obj for SquareServlet
+	RequestDispatcher rd = req.getRequestDispatcher("sq");
+		
+	// forward request, response objects to SquareServlet
+	rd.forward(request, response);
+	
+}
+// SquareServlet.java
+public void service(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		// print msg
+		PrintWriter out	= response.getWriter();
+		out.print("SQ Servlet");
+		
+		// read sum value from request obj , square it and print
+		int sum = (Integer)request.getAttribute("sum");
+		int square = sum * sum;
+		out.print(square);
+	}
+}
+
+// Case 3: Redirect
+// AddServlet.java
+public void service(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	
+	// Read num1, num2 and convert string to int type.
+	int n1 = Integer.parseInt(request.getParameter("num1"));
+	int n2 = Integer.parseInt(request.getParameter("num2"));
+	
+	// add numbers
+	int sum = n1+n2;
+	
+	// redirect to 2nd Servlet(SquareServlet) to SquareServlet
+	response.sendRedirect("sq");
+}
+
+//SquareServlet.java
+public void service(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		// read sum value from request obj , square it and print
+		int sum = (Integer)request.getAttribute("sum"); // null
+		int square = sum * sum;
+		
+		response.setContentType("text/html");
+		
+		// print msg
+		PrintWriter out	= response.getWriter();
+		
+		out.print("SQ Servlet");
+		out.println("<html><body>");
+		out.println("Square: "+square);
+		out.println("</body></html>");		
+	}
+}
+
+
+// Case4: HttpSession
+public void service(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	
+	// Read num1, num2 and convert string to int type.
+	int n1 = Integer.parseInt(request.getParameter("num1"));
+	int n2 = Integer.parseInt(request.getParameter("num2"));
+	
+	// add numbers
+	int sum = n1+n2;
+	
+	request.get
+	// redirect to 2nd Servlet(SquareServlet) to SquareServlet
+	response.sendRedirect("sq");
+}
+
+//SquareServlet.java
+public void service(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	
+	// read sum value from session obj , square it and print
+	HttpSession session= request.getSession();
+	String str = session.getAttribute("sum").toString();
+	int num = Integer.parseInt(str);
+	int square = num * num;
+	
+	response.setContentType("text/html");
+	
+	// print msg
+	PrintWriter out	= response.getWriter();
+	
+	out.println("<html><body>");
+	out.println("Square: "+square);
+	out.println("</body></html>");
+}
+
+case 5: Cookie - stored in client browser
+// add cookie
+protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	
+	String email = request.getParameter("email");
+	String password = request.getParameter("password");
+	
+	Cookie ck = null;
+	
+	PrintWriter out = response.getWriter();
+	
+	// validate user
+	if(email.equals("user1@example.com") && password.equals("abc.123")) {
+		// create cookie
+		ck = new Cookie("email", email);
+		// add cookie in response
+		response.addCookie(ck);
+		int indx = email.indexOf('@');
+		String uname=email.substring(0, indx);
+		out.println("Welcome "+uname);
+	} else {
+		out.println("Failed to login");
+	}
+	
+}
+
+// remove cookie
+
+
+protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	String email= request.getParameter("email");
+	PrintWriter out = response.getWriter();
+	if(email!=null) {
+		  Cookie ck=new Cookie("email","");  
+		  ck.setMaxAge(0);  
+		  response.addCookie(ck);
+		  out.print("Logged out sucessfully!");
+	} else {
+		out.println("Login first");
+	}
+}
+
+
+// Case 6: Hidden form field
+
+	
+<h3>Hidden Form Field Example</h3>
+<form action="hidden1" method="post">
+	<input type="text" name="uname" placeholder="Enter your name"/>
+	<input type="submit" value="Go"/>
+</form>
+	
+protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	String uname=request.getParameter("uname");
+	
+	PrintWriter out = response.getWriter();
+	out.println("<h1>");
+	out.println("Hello "+uname);
+	out.println("</h1>");
+	out.println("<html><body>");
+	out.println("<form action='hidden2' method='get'>");
+	out.println("<input type='hidden' name='uname' value='page2' />"); // hidden field
+	out.println("<input type='submit' value='Go'/>");
+	out.println("</body></html>");
+}
+
+
+protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	String name = request.getParameter("uname");
+	PrintWriter out = response.getWriter();
+	out.println("Hello "+name);
+}
+
+
+Case 7: url rewriting -
+
+
+// Servlet life cycle methods
+1. init() - invokes once at the time servlet instantiation
+2. service() - handle multiple client requests and sends responses
+3. destroy() - invokes once just before servlet destrcution.
+
+// load-on-startup  - defines order of loading servlets at the time of deployment
+- web.xml
+<web-app>  
+  <servlet>  
+   <servlet-name>servlet1</servlet-name>  
+   <servlet-class>com.example.Servlet1</servlet-class>  
+   <load-on-startup>0</load-on-startup>  
+  </servlet>  
+  
+  <servlet>  
+   <servlet-name>servlet2</servlet-name>  
+   <servlet-class>com.example.Servlet2</servlet-class>  
+   <load-on-startup>1</load-on-startup>  
+  </servlet>  
+</web-app>  
+
+
+//  ServletConfig & ServletContext
+// ServletConfig - object contains initial configuration for Servlet passed at the time of initialization.
+//               - One ServletConfig object per Servlet
+//               - info shared by specific servlet
+- web.xml
+<servlet>
+	<servlet-name>ServletConfigDemo</servlet-name>
+	<servlet-class>com.example.ServletConfigDemo</servlet-class>
+	
+	<init-param>
+		<param-name>name</param-name>
+		<param-value>Square</param-value>
+	</init-param>
+</servlet>
+
+- ServletConfigDemo
+private ServletConfig config;
+
+// pass the servlet config info to the servlet at the time of servlet object  creation.
+public void init(ServletConfig config){
+	this.config=config;
+}
+
+// Access values 
+public void service(ServletRequest request, ServletResponse response){
+	// pass <param-name> to get <param-value>
+	String name=config.getInitParameter("name"); // Square
+	out.println(name);
+
+}
+
+// ServletContext - created by WebContainer at the time of project deployment
+//                - only one ServletContext object per app.
+//                - Info share by many servlets
+- web.xml
+<context-param>
+	<param-name>company</param-name>
+	<param-value>Wipro</param-value>
+</context-param>
+
+- service() or doGet() or any method
+String company=context.getInitParameter("company");
+out.println(company);
+
+
+
+
+// MVC Project -  Uses Servlet and JSP together.
+
+  // Step 1 - Add Data
+  String[] employees = {"Ram", "Bob", "Jhon"}; 
+  request.setAttribute("empList", employees);
+
+  // Step 2 - get request dispatcher
+  RequestDispatcher dispatcher =
+	request.getRequestDispatcher("/emp_list.jsp");
+
+  // step 3 - forward to the jsp 
+  dispatcher.forward(request, response);
+
+- JSP - to view data
+- JSP uses JSTL to access data
+
+ex:
+emp_list.jsp
+<c:forEach var="emp" items="${empList}>
+	${emp} <br/>
+</c:forEach>
