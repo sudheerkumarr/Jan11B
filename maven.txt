@@ -1,0 +1,90 @@
+Maven - is a build tools
+- helps to create project structure
+- download dependencies
+- generate reports/documents
+- pakaging application
+
+pom.xml -
+ dependencies - contains info about dependencies that needs to download.
+ plugins - contains configurations
+
+
+Repositories
+-------------
+Maven Repository -is a directory of packaged jar files
+
+- types of repositories
+   Local Repository --> Central Repository --> Remote Repository
+
+- Local Repository - Maintained locally within our desktop
+                   - Windows: C:\Users\<User_Name>\.m2
+				   - Mac: /Users/<user_name>/.m2
+				   
+- Central  ""      - It is directly from the web 
+                   - https://search.maven.org
+				   - https://mvnrepository.com/repos/central
+				   
+- Remote   ""      - It is also from web, but we need to specifically mention in the pom
+
+
+Maven Life cycle
+------------------
+Life cyles
+----------
+
+  1. Build
+  2. clean
+  3. site
+  
+  
+Phases : Each and every lifecycle is associated with multiple phases
+-------
+build(Phases) - validate, compile, test, package, install, deploy etc.,
+
+clean(Phases) - pre-clean, clean, post-clean
+
+site(Phases) - pre-site, site, post-site
+
+
+Plugin - each and every phase associated with plugins
+------
+compile - compliler plugins
+test    - surefire plugin
+packaging - wars, jars, ears
+
+
+Goal:
+----
+test plugin has a goal to test
+compliler plugin has a goal to compile
+
+
+
+Commands
+--------
+// syntax -1 
+mvn <phase-name>
+mvn clean
+mvn build
+mvn compile
+mvn install
+
+// syntax -2
+mvn <plugin:goal>
+mvn compiler:compille
+
+
+// syntax -3
+mvn <phase1> <phase2>
+mvn clean build
+mvn clean install
+
+Maven Archetype
+===== ==========
+Template to create projects  like spring, hibernate, web services/restful services.
+
+
+// Create project through command line
+mvn archetype:generate -DgroupId=<group-id> -DartifactId=<artifact-id> -DarchetypeArtifactId=maven-archetype-quickstart
+	-DinteractiveMode=false
+	
