@@ -4,10 +4,16 @@ Maven - is a build tools
 - generate reports/documents
 - pakaging application
 
-pom.xml -
+pom.xml - refers Local repo for jar files
  dependencies - contains info about dependencies that needs to download.
- plugins - contains configurations
+ <dependencies>
+    ...
+ <dependencies>
 
+ plugins - contains configurations
+ <plugin>
+    ...
+ <plugin>
 
 Repositories
 -------------
